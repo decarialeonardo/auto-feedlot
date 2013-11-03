@@ -1,0 +1,28 @@
+.auto-container{
+	text-align:center;
+}
+
+#selected-cows{
+	padding: 10px;
+}
+
+#process-bar-description{
+	padding-top: 50px;
+}
+
+#progress-sensors-bar {
+	width:50%;
+	left:24%;
+	margin:10px;
+	display:none;
+}
+
+#process-description{
+	float: left;
+	width: 40%;
+	padding: 10px;
+}
+
+#rigth-content {
+	width: 60%;
+}

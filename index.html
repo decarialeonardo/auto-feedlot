@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<title>Automatizaci&oacute;n de un feedlot</title>
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  		<script src="Main.js"></script>
+  		<!-- Latest compiled and minified JavaScript -->
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+		<script src="bootstrap/js/bootstrap-progressbar.min.js"></script>
+
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="bootstrap/css/bootstrap-progressbar.min.css">
+		<link rel="stylesheet" href="main.css">
+	</head>
+	<body>
+		<h1 style="text-align: center;">Automatizaci&oacute;n de un feedlot</h1>
+		<p style="text-align: center;"> Trabajo Pr&aacute;ctico</p>
+		<p style="text-align: center;"> <strong>75.66</strong> - Manufacturada Integrada por Computadora (CIM) - II<br /> Segundo Cuatrimestre de 2013<br />
+		<br />
+		<hr />
+		<div class="auto-container">
+			<div id="selected-cows">
+				<label>Seleccione la cantidad de vacas que se encuentran en el criadero: </label>
+				<select class="selectpicker" data-style="btn-primary">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+				</select>
+			</div>		
+			<button type="button" class="btn btn-primary" id="startAuto">Comenzar Automatizaci&oacute;n</button>
+			<button type="button" class="btn btn-primary" id="startSensors" style="display:none;">Iniciar Sensores</button>
+			<div id="process-bar-description"></div>
+			<br />
+			<div id="progress-sensors-bar" class="progress progress-striped" style="">
+				<div class="progress-bar" aria-valuetransitiongoal="100"></div>
+			</div>
+			<div id="process-description">
+				<table class="table table-hover" border="1"></table>
+			</div>
+			<div id="rigth-content">
+				<button type="button" class="btn btn-primary" id="scalesWeighing" style="display:none;">Realizar pesaje de ganado</button>
+			</div>	
+		</div>
+		<hr />
+		<p style="text-align: center;"><span style="color:#008000;">Universidad de Buenos Aires - Facultad de ingenier&iacute;a</span></p>
+
+	</body>
+</html>
