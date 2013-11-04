@@ -11,6 +11,7 @@
 	 // 	cow3Sensor = new Sensor();
 	 // 	cowsReaderInWaterConainter = new Sensor();
 		// cowsReaderInSaclesConainter = new Sensor();
+		$('.selectpicker').selectpicker();
 
 		$('#startAuto').click(function(e){
  			amountOfCows = $("select option:selected").val();
@@ -28,6 +29,10 @@
 		        done: initializeSensors
 		    });
 		});
+
+		$('#showSensors').click(function(e){
+			showTable();	
+		});
 	};
 
  	function initializeSensors(){
@@ -36,7 +41,9 @@
  		$('#startSensors').hide("slow");
  		$('#process-bar-description').hide("slow");
  		$('#scalesWeighing').show("slow");
- 		showTable();
+ 		$('#showSensors').show("slow");
+
+ 		
 
  		
 		// waterSensor.start();
@@ -53,27 +60,55 @@
  		table += '<tr>';
  		table += '<th>Sensor</th>';
  		table += '<th>Estado</th>';
+ 		table += '<th>Sensando</th>';
+ 		table += '<th>Valor</th>';
  		table += '</tr>';
  		for (var i = amountOfCows - 1; i >= 0; i--) {
 			table += '<tr class="success">';
-			table += '<td>Vaca-'+i*65+'</td>';
-			table += '<td>Encendido</td>';
+			table += '<td class="sensor">Vaca-'+i*65+'</td>';
+			table += '<td class="state">Encendido</td>';
+			table += '<td class="activating">-</td>';
+			table += '<td class="value">-</td>';
 			table += '</tr>';
  		};
  		table += '<tr class="success">';
-		table += '<td>Water-Limit-35</td>';
-		table += '<td>Encendido</td>';
+		table += '<td class="sensor">Water-Limit-35</td>';
+		table += '<td class="state">Encendido</td>';
+		table += '<td class="activating">En nivel</td>';
+		table += '<td class="value">500lts</td>';
 		table += '</tr>';
  		table += '<tr class="success">';
-		table += '<td>Water-3545</td>';
-		table += '<td>Encendido</td>';
-		table += '</tr>';scalesWeighing
+		table += '<td class="sensor">Water-3545</td>';
+		table += '<td class="state">Encendido</td>';
+		table += '<td class="activating">No se registra ningun sensor</td>';
+		table += '<td class="value">-</td>';
+		table += '</tr>';
 		table += '<tr class="success">';
-		table += '<td>Scale-525</td>';
-		table += '<td>Encendido</td>';
+		table += '<td class="sensor">Scale-525</td>';
+		table += '<td class="state">Encendido</td>';
+		table += '<td class="activating">No se registra ningun sensor</td>';
+		table += '<td class="value">-</td>';
 		table += '</tr>';
  		table += '</tbody>';
  		$('.table.table-hover').html(table);
+
+ 		$('.table').find('tr').click( function(){
+ 			changeSensorState($(this));	
+ 		});
+ 	};
+
+ 	function changeSensorState(el){
+		if ( el.index() === 0 ){
+ 			return;	
+ 		}
+
+		if ( el.hasClass("success") ){
+			el.removeClass("success").addClass("danger");
+			el.find('td.state').html("Apagado");
+		} else {
+			el.removeClass("danger").addClass("success");
+			el.find('td.state').html("Encendido");
+		}
  	};
 
  	/** Realizar pesaje de las vacas **/
