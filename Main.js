@@ -95,6 +95,8 @@
  		$('.table').find('tr').click( function(){
  			changeSensorState($(this));	
  		});
+
+ 		startAutomatization();
  	};
 
  	function changeSensorState(el){
@@ -109,6 +111,29 @@
 			el.removeClass("danger").addClass("success");
 			el.find('td.state').html("Encendido");
 		}
+ 	};
+
+ 	function startAutomatization(){
+
+		(function loop() {
+		    var rand = Math.round(Math.random() * (3000 - 500)) + 500;
+		    setTimeout(function() {
+		            doSomething(rand);
+		            loop();  
+		    }, rand);
+		}());
+
+
+ 		function doSomething(rand) {
+ 			var array = $('table tr');
+ 			for (var i = array.length - 1; i >= 0; i--) {
+ 				if ( $(array[i]).find('.state').html() === "Encendido" ){
+	 				if ( i % 2 == 0){
+	 					$(array[i]).find('.activating').html("regulando "+rand);
+	 				}
+ 				}
+ 			};
+ 		}
  	};
 
  	/** Realizar pesaje de las vacas **/
