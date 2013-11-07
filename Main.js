@@ -1,6 +1,9 @@
  $(document).ready(function() {
 
- 	var amountOfCows = 0;
+ 	var amountOfCows = 0,
+ 	MAX_WATER = 500,
+ 	cowsActive = [];
+
 
 	init();
 
@@ -31,7 +34,15 @@
 		});
 
 		$('#showSensors').click(function(e){
-			showTable();	
+			showTable();
+			$('#back').show("slow");	
+			$('#showSensors').hide("slow");
+		});
+
+		$('#back').click(function(e){
+			$('#showSensors').show("slow");
+			$('#back').hide("slow");
+			$('#process-description').hide("slow");
 		});
 	};
 
@@ -55,7 +66,8 @@
  	};
 
  	function showTable(){
-		$('#process-description').append("<strong>El sistema cuenta con "+amountOfCows+" vacas con sensores en sus orejas. </br>Tambi&eacute;n los sensores en las bateas y en la zona de pasaje.</strong>");
+ 		$('#process-description').show("slow");
+		$('#description').html("<strong>El sistema cuenta con "+amountOfCows+" vacas con sensores en sus orejas. </br>Tambi&eacute;n los sensores en las bateas y en la zona de pasaje.</strong>");
  		table = '<tbody>';
  		table += '<tr>';
  		table += '<th>Sensor</th>';
@@ -71,13 +83,13 @@
 			table += '<td class="value">-</td>';
 			table += '</tr>';
  		};
- 		table += '<tr class="success">';
+ 		table += '<tr id="water-limit" class="success">';
 		table += '<td class="sensor">Water-Limit-35</td>';
 		table += '<td class="state">Encendido</td>';
 		table += '<td class="activating">En nivel</td>';
-		table += '<td class="value">500lts</td>';
+		table += '<td class="value">'+MAX_WATER+'lts</td>';
 		table += '</tr>';
- 		table += '<tr class="success">';
+ 		table += '<tr id="water-reader" class="success">';
 		table += '<td class="sensor">Water-3545</td>';
 		table += '<td class="state">Encendido</td>';
 		table += '<td class="activating">No se registra ningun sensor</td>';
@@ -90,9 +102,9 @@
 		table += '<td class="value">-</td>';
 		table += '</tr>';
  		table += '</tbody>';
- 		$('.table.table-hover').html(table);
+ 		$('#sensorsTable').html(table);
 
- 		$('.table').find('tr').click( function(){
+ 		$('#sensorsTable').find('tr').click( function(){
  			changeSensorState($(this));	
  		});
 
@@ -107,32 +119,66 @@
 		if ( el.hasClass("success") ){
 			el.removeClass("success").addClass("danger");
 			el.find('td.state').html("Apagado");
+			el.find('td.activating').html("Sin actividad");
+			var index = cowsActive.indexOf(el.find('.sensor').html());
+			if (index > -1) {
+			    cowsActive.splice(index, 1);
+			}
 		} else {
 			el.removeClass("danger").addClass("success");
 			el.find('td.state').html("Encendido");
+			el.find('td.activating').html("Esperando Evento");
 		}
  	};
 
  	function startAutomatization(){
 
-		(function loop() {
+		(function loopForWater() {
+		    var rand = Math.round(Math.random() * (20000 - 1000)) + 1000;
+		    setTimeout(function() {
+		            consumeWater(rand);
+		            loopForWater();
+		    }, rand);
+		}());
+
+		(function loopForCows() {
 		    var rand = Math.round(Math.random() * (3000 - 500)) + 500;
 		    setTimeout(function() {
-		            doSomething(rand);
-		            loop();  
+		            cowsMovement(rand);
+		            loopForCows();  
 		    }, rand);
 		}());
 
 
- 		function doSomething(rand) {
- 			var array = $('table tr');
- 			for (var i = array.length - 1; i >= 0; i--) {
+ 		function cowsMovement(rand) {
+ 			var array = $('#sensorsTable tr');
+ 			for (var i = array.length - 4; i >= 0; i--) {
  				if ( $(array[i]).find('.state').html() === "Encendido" ){
-	 				if ( i % 2 == 0){
-	 					$(array[i]).find('.activating').html("regulando "+rand);
+	 				$(array[i]).find('.activating').html("En movimiento");
+	 				var index = cowsActive.indexOf($(array[i]).find('.sensor').html());
+					if (index <= -1) {
+	 					cowsActive.push($(array[i]).find('.sensor').html());
 	 				}
  				}
  			};
+
+ 		}
+ 		
+ 		function consumeWater(){
+			if ( $('#water-limit').hasClass('success') ){
+				if ( $('#water-limit .value').html() === "0lts" ){
+					changeSensorState($('#water-limit'));
+					$('#water-limit').unbind('click');
+				} else {
+					$('#water-limit .value').html((MAX_WATER--)+"lts");
+					$('#water-limit .activating').html("Limite del agua");
+
+					var index = Math.floor(Math.random()*cowsActive.length);
+					$('#water-reader .value').html(cowsActive[index]);
+					$('#water-reader .activating').html("Sensando ganado en batea");
+					
+				}
+			}
  		}
  	};
 

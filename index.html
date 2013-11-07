@@ -9,10 +9,9 @@
 		<script src="bootstrap/js/bootstrap-select.min.js"></script>
 
 		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css"-->
 		<link rel="stylesheet" href="bootstrap/css/bootstrap-progressbar.min.css">
 		<link rel="stylesheet" href="bootstrap/css/bootstrap-select.min.css">
-		<link rel="stylesheet" href="bootstrap/css/bootstrap-combined.min.css">
 		<link rel="stylesheet" href="main.css">
 	</head>
 	<body>
@@ -45,11 +44,30 @@
 				<div class="progress-bar" aria-valuetransitiongoal="100"></div>
 			</div>
 			<div id="rigth-content">
-				<button type="button" class="btn btn-primary" id="showSensors" style="display:none;">Monitorear Sensores</button>
-				<button type="button" class="btn btn-primary" id="scalesWeighing" style="display:none;">Realizar pesaje de ganado</button>
+				<button type="button" class="btn btn-primary" id="showSensors" style="display:none;">Visualizar Sensores</button>
+				<button type="button" class="btn btn-primary" id="back" style="display:none;">Volver</button>
+				<a data-toggle="modal" href="#myModal" id="scalesWeighing" class="btn btn-primary" style="display:none">Realizar pesaje de ganado</a>
 			</div>
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			      	<div class="modal-content">
+			        	<div class="modal-header">
+			          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			          		<h4 class="modal-title">Pesajes</h4>
+			        	</div>
+			        <div class="modal-body">
+			    		<table id="scales" class="table table-hover" border="1"></table>    	
+			        </div>
+			        <div class="modal-footer">
+			        	<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			        </div>
+			      </div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
 			<div id="process-description">
-				<table class="table table-hover" border="1"></table>
+				<div id="description"></div>
+				<table id="sensorsTable" class="table table-hover" border="1"></table>
 			</div>
 		</div>
 		<hr />
