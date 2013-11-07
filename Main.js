@@ -3,17 +3,12 @@
  	var amountOfCows = 0,
  	MAX_WATER = 500,
  	cowsActive = [];
+ 	cowsWeight = [];
 
 
 	init();
 
 	function init(){
-		// waterSensor = new Sensor("water","XR32","waterSensor","off");
-	 // 	cow1Sensor = new Sensor();
-	 // 	cow2Sensor = new Sensor();
-	 // 	cow3Sensor = new Sensor();
-	 // 	cowsReaderInWaterConainter = new Sensor();
-		// cowsReaderInSaclesConainter = new Sensor();
 		$('.selectpicker').selectpicker();
 
 		$('#startAuto').click(function(e){
@@ -26,6 +21,7 @@
 		$('#startSensors').click(function(e){
 			$('#progress-sensors-bar').show();
 			$('#process-bar-description').html("<strong>Inicializando Sensores ...</strong>");
+			$('.progress .progress-bar').css('width','0%');
 			$('.progress .progress-bar').progressbar({
 		        transition_delay: 1000,
 		        display_text: 'fill',
@@ -41,28 +37,108 @@
 
 		$('#back').click(function(e){
 			$('#showSensors').show("slow");
+			$('#shutdown').show("slow");
 			$('#back').hide("slow");
 			$('#process-description').hide("slow");
 		});
+
+		$('#scalesWeighing').click(function (e) {
+		   	showTableWeights(false);
+ 			$('#scales-weighing .activating').html("Pesajes realizados");
+ 			var button = '<a data-toggle="modal" href="#myModal" id="showWeights" class="btn btn-primary">Ver Pesos</a>';
+ 			$('#scales-weighing .value').html(button);
+		});
+
+		$('#showWeights').click(function(e){
+			showTableWeights(true);
+		});
+
+		$('#shutdown').click(function(e){
+			restartApp();
+		});
+
+		$('#report').click(function(e){
+			generateReport();
+		});
+	};
+
+	function generateReport(){
+		table = '<tbody>';
+ 		table += '<tr>';
+ 		table += '<th>Etiqueta de Ganado</th>';
+ 		table += '<th>Peso inicial (Kg)</th>';
+ 		table += '<th>Peso Final (Kg)</th>';
+ 		table += '<th>Aumento (Kg)</th>';
+ 		table += '<th>Tiempo de consumo (seg)</th>';
+ 		table += '</tr>';
+ 		for (var i = amountOfCows - 1; i >= 0; i--) {
+			var size = cowsWeight[i].weight.length;
+			var diff = (cowsWeight[i].weight[size-1]-cowsWeight[i].weight[0]);
+			table += '<tr class="info">';
+			table += '<td>RFID-'+i*65+'</td>';
+			table += '<td>'+Math.round(cowsWeight[i].weight[0] * 100) / 100+'</td>';
+			table += '<td>'+Math.round(cowsWeight[i].weight[size-1] * 100) / 100+'</td>';
+			table += '<td>'+Math.round(diff * 100) / 100+'</td>';
+			table += '<td>'+(Math.round(diff * 100) / 100)*3600+'</td>';
+			table += '</tr>';
+ 		};
+ 		table += '</tbody>';
+ 		$('#sensorsTable').html(table);
+	};	
+
+	function restartApp(){
+		$('#progress-sensors-bar').hide("slow");
+ 		$('#startSensors').hide("slow");
+ 		$('#shutdown').hide("slow");
+ 		$('#scalesWeighing').hide("slow");
+ 		$('#showSensors').hide("slow");
+ 		$('#process-description').hide("slow");
+ 		$('#back').hide("slow");
+ 		$('#report').hide('slow');
+		$('#description').html('');
+		$('#scales').html('');
+
+ 		$('#startAuto').show("slow");
+		$('#selected-cows').show("slow");
+		$('#process-bar-description').show("slow");
+		$('#process-bar-description').html('');
+
+ 		amountOfCows = 0;
+ 		MAX_WATER = 500;
+ 		cowsActive = [];
+ 		cowsWeight = [];
+	};
+
+	function showTableWeights(show){
+		$('#report').show('slow');
+		table = '<tbody>';
+ 		table += '<tr>';
+ 		table += '<th>Sensor</th>';
+ 		table += '<th>Peso(Kg)</th>';
+ 		table += '</tr>';
+ 		for (var i = amountOfCows - 1; i >= 0; i--) {
+			table += '<tr class="warning">';
+			table += '<td class="sensor">'+cowsWeight[i].id+'</td>';
+			var weight = cowsWeight[i].weight[cowsWeight[i].weight.length -1];
+			if ( !show ){
+				var lastWeight = weight + Math.random()*30;
+				cowsWeight[i].weight.push(lastWeight);
+				weight = Math.round(lastWeight * 100) / 100;
+			}
+			table += '<td class="weight">'+weight+'</td>';
+			table += '</tr>';
+ 		};
+ 		table += '</tbody>';
+		$('#scales').html(table);
 	};
 
  	function initializeSensors(){
- 		var table = '';
  		$('#progress-sensors-bar').hide("slow");
  		$('#startSensors').hide("slow");
  		$('#process-bar-description').hide("slow");
+ 		$('#shutdown').show("slow");
  		$('#scalesWeighing').show("slow");
  		$('#showSensors').show("slow");
-
- 		
-
- 		
-		// waterSensor.start();
-	 // 	cow1Sensor.start();
-	 // 	cow2Sensor.start();
-	 // 	cow3Sensor.start();
-	 // 	cowsReaderInWaterConainter.start();
-		// cowsReaderInSaclesConainter.start();
  	};
 
  	function showTable(){
@@ -77,26 +153,27 @@
  		table += '</tr>';
  		for (var i = amountOfCows - 1; i >= 0; i--) {
 			table += '<tr class="success">';
-			table += '<td class="sensor">Vaca-'+i*65+'</td>';
+			table += '<td class="sensor">RFID-'+i*65+'</td>';
 			table += '<td class="state">Encendido</td>';
 			table += '<td class="activating">-</td>';
 			table += '<td class="value">-</td>';
 			table += '</tr>';
+			cowsWeight.push({'id':'RFID-'+i*65, 'weight':[650]});
  		};
  		table += '<tr id="water-limit" class="success">';
-		table += '<td class="sensor">Water-Limit-35</td>';
+		table += '<td class="sensor">Interruptores de nivel - Batea</td>';
 		table += '<td class="state">Encendido</td>';
 		table += '<td class="activating">En nivel</td>';
 		table += '<td class="value">'+MAX_WATER+'lts</td>';
 		table += '</tr>';
  		table += '<tr id="water-reader" class="success">';
-		table += '<td class="sensor">Water-3545</td>';
+		table += '<td class="sensor">Lectores RFID - Batea</td>';
 		table += '<td class="state">Encendido</td>';
 		table += '<td class="activating">No se registra ningun sensor</td>';
 		table += '<td class="value">-</td>';
 		table += '</tr>';
-		table += '<tr class="success">';
-		table += '<td class="sensor">Scale-525</td>';
+		table += '<tr id="scales-weighing" class="success">';
+		table += '<td class="sensor">Balanza Electr&oacutenica</td>';
 		table += '<td class="state">Encendido</td>';
 		table += '<td class="activating">No se registra ningun sensor</td>';
 		table += '<td class="value">-</td>';
@@ -104,8 +181,8 @@
  		table += '</tbody>';
  		$('#sensorsTable').html(table);
 
- 		$('#sensorsTable').find('tr').click( function(){
- 			changeSensorState($(this));	
+ 		$('#sensorsTable').find('td.state').click( function(){
+ 			changeSensorState($(this).parent());	
  		});
 
  		startAutomatization();
@@ -120,6 +197,9 @@
 			el.removeClass("success").addClass("danger");
 			el.find('td.state').html("Apagado");
 			el.find('td.activating').html("Sin actividad");
+			if ( el.attr('id') === "scales-weighing" ){
+				$('#scalesWeighing').hide('slow');
+			}
 			var index = cowsActive.indexOf(el.find('.sensor').html());
 			if (index > -1) {
 			    cowsActive.splice(index, 1);
@@ -128,6 +208,9 @@
 			el.removeClass("danger").addClass("success");
 			el.find('td.state').html("Encendido");
 			el.find('td.activating').html("Esperando Evento");
+			if ( el.attr('id') === "scales-weighing" ){
+				$('#scalesWeighing').show('slow');
+			}
 		}
  	};
 
@@ -181,24 +264,5 @@
 			}
  		}
  	};
-
- 	/** Realizar pesaje de las vacas **/
- 	function scalesWeighing(){
-
- 	};
-
- 	function checkWaterSensor(){
-
- 	};
-
- 	function shutdownSensors(){
-		waterSensor.end();
-	 	cow1Sensor.end();
-	 	cow2Sensor.end();
-	 	cow3Sensor.end();
-	 	cowsReaderInWaterConainter.end();
-		cowsReaderInSaclesConainter.end();
- 	};
-
 
  });

@@ -1,3 +1,4 @@
+
 <html>
 	<head>
 		<title>Automatizaci&oacute;n de un feedlot</title>
@@ -44,9 +45,11 @@
 				<div class="progress-bar" aria-valuetransitiongoal="100"></div>
 			</div>
 			<div id="rigth-content">
+				<button type="button" class="btn btn-danger" id="shutdown" style="display:none;">Apagar Sistema</button>
 				<button type="button" class="btn btn-primary" id="showSensors" style="display:none;">Visualizar Sensores</button>
 				<button type="button" class="btn btn-primary" id="back" style="display:none;">Volver</button>
 				<a data-toggle="modal" href="#myModal" id="scalesWeighing" class="btn btn-primary" style="display:none">Realizar pesaje de ganado</a>
+				<button type="button" class="btn btn-success" id="report" style="display:none;">Generar Reporte</button>
 			</div>
 			<!-- Modal -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
