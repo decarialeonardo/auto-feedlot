@@ -72,6 +72,7 @@
 			$('#water-limit .activating').html("Sin reservas");
 			$('#water-limit .state').html("Apagado");
 			$('#water-limit').removeClass("success").addClass("danger");
+			$('#water-limit .state').unbind('click');
 
 		});
 
