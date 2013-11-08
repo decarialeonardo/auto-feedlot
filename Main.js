@@ -33,6 +33,7 @@
 			showTable();
 			$('#back').show("slow");	
 			$('#showSensors').hide("slow");
+			$("#limit-alert").show("slow");
 		});
 
 		$('#back').click(function(e){
@@ -40,6 +41,7 @@
 			$('#shutdown').show("slow");
 			$('#back').hide("slow");
 			$('#process-description').hide("slow");
+			$("#limit-alert").hide("slow");
 		});
 
 		$('#scalesWeighing').click(function (e) {
@@ -60,6 +62,19 @@
 		$('#report').click(function(e){
 			generateReport();
 		});
+
+		$('#alertMessage .close').click(function(){
+			$("#alertMessage").modal('hide');
+		});
+
+		$('#limit-alert').click(function(){
+			$('#water-limit .value').html("0lts");
+			$('#water-limit .activating').html("Sin reservas");
+			$('#water-limit .state').html("Apagado");
+			$('#water-limit').removeClass("success").addClass("danger");
+
+		});
+
 	};
 
 	function generateReport(){
@@ -95,6 +110,7 @@
  		$('#process-description').hide("slow");
  		$('#back').hide("slow");
  		$('#report').hide('slow');
+ 		$("#limit-alert").hide('slow');
 		$('#description').html('');
 		$('#scales').html('');
 
@@ -250,12 +266,10 @@
  		function consumeWater(){
 			if ( $('#water-limit').hasClass('success') ){
 				if ( $('#water-limit .value').html() === "0lts" ){
-					changeSensorState($('#water-limit'));
-					$('#water-limit').unbind('click');
+					return;
 				} else {
 					$('#water-limit .value').html((MAX_WATER--)+"lts");
 					$('#water-limit .activating').html("Limite del agua");
-
 					var index = Math.floor(Math.random()*cowsActive.length);
 					$('#water-reader .value').html(cowsActive[index]);
 					$('#water-reader .activating').html("Sensando ganado en batea");

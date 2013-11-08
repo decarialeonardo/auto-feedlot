@@ -22,6 +22,16 @@
 		<br />
 		<hr />
 		<div class="auto-container">
+			<div class="modal fade" id="alertMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content alert-danger alert-message">
+						<div class="modal-body">    	
+							<strong>Alerta!!</strong> Se deber&aacute; recargar la batea. Se encuentra sin reservas.
+							<a class="close">&times;</a>
+			        	</div>
+					</div>	
+				</div>
+			</div>
 			<div id="selected-cows">
 				<label>Seleccione la cantidad de vacas que se encuentran en el criadero: </label>
 				<select class="selectpicker" data-style="btn-info" data-width="50px">
@@ -72,6 +82,7 @@
 				<div id="description"></div>
 				<table id="sensorsTable" class="table table-hover" border="1"></table>
 			</div>
+			<a data-toggle="modal" href="#alertMessage" id="limit-alert" class="btn btn-danger" style="display:none">Alerta de limite de batea</a>
 		</div>
 		<hr />
 		<p style="text-align: center;"><span style="color:#008000;">Universidad de Buenos Aires - Facultad de ingenier&iacute;a</span></p>

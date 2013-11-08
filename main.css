@@ -23,3 +23,12 @@
 
 #rigth-content {
 }
+
+#alertMessage {
+	border-color: #d6e9c6;
+	color: #468847;
+}
+
+.alert-message{
+	background-color: #f2dede;
+}
