@@ -9,6 +9,9 @@
 		<script src="bootstrap/js/bootstrap-progressbar.min.js"></script>
 		<script src="bootstrap/js/bootstrap-select.min.js"></script>
 
+		<script src="js/highcharts.js"></script>
+		<script src="js/exporting.js"></script>
+
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css"-->
 		<link rel="stylesheet" href="bootstrap/css/bootstrap-progressbar.min.css">
@@ -70,9 +73,12 @@
 			          		<h4 class="modal-title">Pesajes</h4>
 			        	</div>
 			        <div class="modal-body">
-			    		<table id="scales" class="table table-hover" border="1"></table>    	
+			    		<table id="scales" class="table table-hover" border="1"></table>
+			    		<div style="background-color:#f2dede;width:5px;height:5px;"></div>Vacas en peligro de peso
+			    		<div id="container"style="display:none; min-width: 310px; height: 400px; margin: 0 auto"></div>
 			        </div>
 			        <div class="modal-footer">
+			        	<button type="button"  style="display:none;" id="back-modal" class="btn btn-primary">Volver</button>
 			        	<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			        </div>
 			      </div><!-- /.modal-content -->
