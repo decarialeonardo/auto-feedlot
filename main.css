@@ -32,3 +32,24 @@
 .alert-message{
 	background-color: #f2dede;
 }
+
+#danger-cow{
+	background-color: #d2322d;
+}
+
+#danger-cow .hover{
+	background-color: #d19a9a;
+}
+
+.reference {
+	float: right;
+	width: 200px;
+}
+.reference .rectangule{
+	background-color: #d2322d;
+	border: 1px solid;
+	width: 20px;
+	display: inline;
+	height: 20px;
+	float: left;
+}
