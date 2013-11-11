@@ -18,10 +18,26 @@
 }
 
 #process-description{
-	padding: 20px;
+	padding: 4%;
 }
 
-#rigth-content {
+/** Buttons Bar **/
+.buttons-bar {
+	width: 100%;
+}
+
+.buttons-bar .left-buttons-bar{
+	float: left;
+	width: 10%;
+}
+
+.buttons-bar .center-buttons-bar{
+	width: 80%;
+	float: left;
+}
+
+.buttons-bar .right-buttons-bar{
+	float:left;
 }
 
 #alertMessage {
