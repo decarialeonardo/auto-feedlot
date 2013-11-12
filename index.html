@@ -9,8 +9,10 @@
 		<script src="bootstrap/js/bootstrap-progressbar.min.js"></script>
 		<script src="bootstrap/js/bootstrap-select.min.js"></script>
 
-		<script src="js/highcharts.js"></script>
-		<script src="js/exporting.js"></script>
+		<!--script src="js/highcharts.js"></script>
+		<script src="js/exporting.js"></script-->		
+		<script src="http://code.highcharts.com/stock/highstock.js"></script>
+		<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
 
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css"-->
@@ -98,6 +100,7 @@
 			</div><!-- /.modal -->
 			<div id="process-description">
 				<div id="description"></div>
+				<div id="container-report" ></div>
 				<table id="sensorsTable" class="table table-hover" border="1"></table>
 			</div>
 			<a data-toggle="modal" href="#alertMessage" id="limit-alert" class="btn btn-danger" style="display:none">Simular alerta de limite de batea</a>
