@@ -28,16 +28,17 @@
 
 .buttons-bar .left-buttons-bar{
 	float: left;
-	width: 10%;
+	width: 12%;
 }
 
 .buttons-bar .center-buttons-bar{
-	width: 80%;
+	width: 76%;
 	float: left;
 }
 
 .buttons-bar .right-buttons-bar{
 	float:left;
+	width: 5%;
 }
 
 #alertMessage {

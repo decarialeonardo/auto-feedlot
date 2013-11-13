@@ -4,6 +4,18 @@
  	MAX_WATER = 500,
  	cowsActive = [];
  	cowsWeight = [];
+ 	datas = {
+ 		1:[630,660,690,700,710,750,720,770,800,780,790,800],
+ 		2:[600,640,750,740,770,790,795,810,830,800,810,850],
+ 		3:[610,690,690,800,810,850,860,870,900,910,915,930],
+ 		4:[610,710,655,700,700,730,720,750,775,790,810,820],
+ 		5:[690,665,730,700,750,780,730,770,830,810,790,800],
+ 		6:[620,700,690,700,710,790,790,810,840,860,890,900],
+ 		7:[650,660,755,730,780,810,820,870,880,910,920,910],
+ 		8:[670,650,650,670,690,650,710,710,740,780,750,780],
+ 		9:[690,720,790,800,810,850,820,870,900,980,990,1000],
+ 		10:[680,665,730,700,750,780,790,790,800,800,800,800]
+ 	}
 
 
 	init();
@@ -41,6 +53,7 @@
 			$('#shutdown').show("slow");
 			$('#back').hide("slow");
 			$('#process-description').hide("slow");
+			$('#container-report').html('');
 			$("#limit-alert").hide("slow");
 		});
 
@@ -80,93 +93,71 @@
 
 	function generateReport(){
 		table = '<tbody>';
- 		table += '<tr>';
+ 		table += '<tr style="background-color:#efefef">';
  		table += '<th>Etiqueta de Ganado</th>';
  		table += '<th>Peso inicial (Kg)</th>';
  		table += '<th>Peso Final (Kg)</th>';
  		table += '<th>Aumento (Kg)</th>';
- 		table += '<th>Tiempo de consumo (d&iacute;as)</th>';
+ 		table += '<th>En el año</th>';
  		table += '</tr>';
+ 		var series = [];
  		for (var i = amountOfCows - 1; i >= 0; i--) {
-			var size = cowsWeight[i].weight.length;
-			var diff = (cowsWeight[i].weight[size-1]-cowsWeight[i].weight[0]);
+			var diff = datas[i+1][11]-datas[i+1][0];
 			table += '<tr class="info">';
-			table += '<td>RFID-'+i*65+'</td>';
-			table += '<td>'+Math.round(cowsWeight[i].weight[0] * 100) / 100+'</td>';
-			table += '<td>'+Math.round(cowsWeight[i].weight[size-1] * 100) / 100+'</td>';
+			table += '<td>RFID-'+(i*65+1)+'</td>';
+			table += '<td>'+datas[i+1][0]+'</td>';
+			table += '<td>'+datas[i+1][11]+'</td>';
 			table += '<td>'+Math.round(diff * 100) / 100+'</td>';
-			table += '<td>'+(Math.floor(diff))+'</td>';
+			table += '<td>2013</td>';
 			table += '</tr>';
+
+			serie = {
+						name: 'RFID-'+(i*65+1),
+						data: datas[i+1]
+					};
+ 			series.push(serie);
  		};
  		table += '</tbody>';
  		$('#sensorsTable').html(table);
- 		generateReportChart();
+ 		generateReportChart(series);
+
 	};
 
-	function generateReportChart(){
-		var seriesOptions = [],
-		yAxisOptions = [],
-		seriesCounter = 0,
-		names = ['MSFT', 'AAPL', 'GOOG'],
-		colors = Highcharts.getOptions().colors;
-
-		$.each(names, function(i, name) {
-
-			$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename='+ name.toLowerCase() +'-c.json&callback=?',	function(data) {
-
-				seriesOptions[i] = {
-					name: name,
-					data: data
-				};
-
-				// As we're loading the data asynchronously, we don't know what order it will arrive. So
-				// we keep a counter and create the chart when all the data is loaded.
-				seriesCounter++;
-
-				if (seriesCounter == names.length) {
-					createChart();
-				}
-			});
-		});
-
-		// create the chart when all data is loaded
-		function createChart() {
-
-			$('#container-report').highcharts('StockChart', {
-			    chart: {
-			    },
-
-			    rangeSelector: {
-			        selected: 4
-			    },
-
-			    yAxis: {
-			    	labels: {
-			    		formatter: function() {
-			    			return (this.value > 0 ? '+' : '') + this.value + '%';
-			    		}
-			    	},
-			    	plotLines: [{
-			    		value: 0,
-			    		width: 2,
-			    		color: 'silver'
-			    	}]
-			    },
-			    
-			    plotOptions: {
-			    	series: {
-			    		compare: 'percent'
-			    	}
-			    },
-			    
-			    tooltip: {
-			    	pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-			    	valueDecimals: 2
-			    },
-			    
-			    series: seriesOptions
-			});
-		};
+	function generateReportChart(series){
+		 $('#container-report').highcharts({
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: 'Reporte de ganado en todo en todo el año'
+            },
+            subtitle: {
+                text: 'Perído: de 01 al 12 del 2013'
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                title: {
+                    text: 'Peso (Kg)'
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                        this.x +': '+ this.y +'Kg';
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: series
+        });
 	};
 
 	function restartApp(){
@@ -176,6 +167,7 @@
  		$('#scalesWeighing').hide("slow");
  		$('#showSensors').hide("slow");
  		$('#process-description').hide("slow");
+ 		$('#container-report').html('');
  		$('#back').hide("slow");
  		$('#report').hide('slow');
  		$("#limit-alert").hide('slow');
@@ -347,12 +339,12 @@
  		table += '</tr>';
  		for (var i = amountOfCows - 1; i >= 0; i--) {
 			table += '<tr class="success">';
-			table += '<td class="sensor">RFID-'+i*65+'</td>';
+			table += '<td class="sensor">RFID-'+(i*65+1)+'</td>';
 			table += '<td class="state">Encendido</td>';
 			table += '<td class="activating">-</td>';
 			table += '<td class="value">-</td>';
 			table += '</tr>';
-			cowsWeight.push({'id':'RFID-'+i*65, 'weight':[650]});
+			cowsWeight.push({'id':'RFID-'+(i*65+1), 'weight':[datas[i+1][0]]});
  		};
  		table += '<tr id="water-limit" class="success">';
 		table += '<td class="sensor">Interruptores de nivel - Batea</td>';
